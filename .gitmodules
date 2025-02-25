@@ -1,0 +1,6 @@
+[submodule "terraform-module-reg-demo-branch"]
+	path = terraform-module-reg-demo-branch
+	url = git@github.com:tallen-hashicorp/terraform-module-reg-demo-branch.git
+[submodule "terraform-module-reg-demo-tag"]
+	path = terraform-module-reg-demo-tag
+	url = git@github.com:tallen-hashicorp/terraform-module-reg-demo-tag.git
