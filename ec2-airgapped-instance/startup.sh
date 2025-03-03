@@ -25,6 +25,7 @@ ufw default allow incoming
 ufw default deny outgoing
 
 # Allow TFC
+## https://developer.hashicorp.com/terraform/cloud-docs/api-docs/ip-ranges
 ufw allow out to 75.2.98.97
 ufw allow out to 99.83.150.238
 

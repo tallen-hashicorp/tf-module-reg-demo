@@ -52,38 +52,11 @@ resource "aws_security_group" "ssh_access" {
   }
 }
 
-# TODO - Delete this if we never use it? Keep now for ref
-resource "aws_security_group" "internal_traffic_and_tfc" {
-  name_prefix = "internal_traffic_and_tfc"
-  description = "Allow all internal traffic to EC2 instance"
-
-  # Ingress rule to allow all internal traffic
-  ingress {
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
-    cidr_blocks = ["172.31.32.0/20"] # Replace with your internal IP range (e.g., your VPC's CIDR block)
-  }
-
-  # Egress rule to allow all outbound traffic to TFC
-  # https://developer.hashicorp.com/terraform/cloud-docs/api-docs/ip-ranges
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = [
-      "75.2.98.97/32",  # Specific IP 1
-      "99.83.150.238/32" # Specific IP 2
-    ]
-  }
-}
-
 resource "aws_security_group" "allow_all_egress" {
   name_prefix = "allow all egress"
   description = "Allow all internal traffic to EC2 instance"
 
   # Egress rule to allow all outbound traffic to TFC
-  # https://developer.hashicorp.com/terraform/cloud-docs/api-docs/ip-ranges
   egress {
     from_port   = 0
     to_port     = 0
