@@ -52,8 +52,8 @@ resource "aws_security_group" "ssh_access" {
   }
 }
 
-resource "aws_security_group" "internal_traffic" {
-  name_prefix = "internal_traffic"
+resource "aws_security_group" "internal_traffic_and_tfc" {
+  name_prefix = "internal_traffic_and_tfc"
   description = "Allow all internal traffic to EC2 instance"
 
   # Ingress rule to allow all internal traffic
@@ -64,7 +64,25 @@ resource "aws_security_group" "internal_traffic" {
     cidr_blocks = ["172.31.32.0/20"] # Replace with your internal IP range (e.g., your VPC's CIDR block)
   }
 
-  # Egress rule to allow all outbound traffic
+  # Egress rule to allow all outbound traffic to TFC
+  # https://developer.hashicorp.com/terraform/cloud-docs/api-docs/ip-ranges
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = [
+      "75.2.98.97/32",  # Specific IP 1
+      "99.83.150.238/32" # Specific IP 2
+    ]
+  }
+}
+
+resource "aws_security_group" "allow_all_egress" {
+  name_prefix = "allow all egress"
+  description = "Allow all internal traffic to EC2 instance"
+
+  # Egress rule to allow all outbound traffic to TFC
+  # https://developer.hashicorp.com/terraform/cloud-docs/api-docs/ip-ranges
   egress {
     from_port   = 0
     to_port     = 0
@@ -82,10 +100,12 @@ resource "aws_eip" "this" {
 resource "aws_instance" "example" {
   count                       = var.instance_count
   ami                         = "${data.aws_ami.ubuntu.id}"
-  instance_type               = "t2.micro"
-  vpc_security_group_ids      = ["${aws_security_group.ssh_access.id}"]
+  instance_type               = "t2.medium"
+  vpc_security_group_ids      = ["${aws_security_group.ssh_access.id}", "${aws_security_group.allow_all_egress.id}"]
   key_name                    = var.key_name
   associate_public_ip_address = true
+
+  user_data = file("${path.module}/startup.sh")
 
   tags = {
     Name = "DELETE_ME"
