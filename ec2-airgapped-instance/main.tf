@@ -52,6 +52,7 @@ resource "aws_security_group" "ssh_access" {
   }
 }
 
+# TODO - Delete this if we never use it? Keep now for ref
 resource "aws_security_group" "internal_traffic_and_tfc" {
   name_prefix = "internal_traffic_and_tfc"
   description = "Allow all internal traffic to EC2 instance"

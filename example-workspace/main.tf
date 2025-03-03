@@ -5,7 +5,13 @@ terraform {
     workspaces { 
       name = "testing-for-demo" 
     } 
-  } 
+  }
+  required_providers {
+    random = {
+      source = "app.terraform.io/tallen-demo/random"
+      version = "3.7.1"
+    }
+  }
 }
 
 module "reg-demo-branch" {
