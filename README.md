@@ -1,25 +1,45 @@
-## TF Module Registry Demo
+# TF Module Registry Demo  
 
-## Agenda
-- [ ] Module Registry Overview
-- [ ] How to publish and upgrade Tag based modules
-- [ ] How to publish and upgrade Branch based modules
-- [ ] Using module on local laptop with access to public registry blocked
+## 📌 Agenda  
+- [ ] Module Registry Overview  
+- [ ] How to Publish and Upgrade Tag-Based Modules  
+- [ ] How to Publish and Upgrade Branch-Based Modules  
+- [ ] Using a Module on a Local Laptop with Public Registry Access Blocked  
 
-## Registry Overview
-HCP Terraform and TFE includes a private registry that is available to all accounts. Unlike the public registry, the private registry can import modules and providers from your private VCS repositories on any of HCP Terraform's supported VCS providers. It also lets you upload and manage private, custom providers through the HCP Terraform API and curate a list of commonly-used public providers and modules.
+---  
 
-## Links
-* [terraform-module-reg-demo-branch](https://github.com/tallen-hashicorp/terraform-module-reg-demo-branch)
-* [terraform-module-reg-demo-tag](https://github.com/tallen-hashicorp/terraform-module-reg-demo-tag)
+## 🔍 Registry Overview  
+HCP Terraform and Terraform Enterprise (TFE) include a **private module registry** available to all accounts. Unlike the public Terraform Registry, the private registry allows:  
 
-## Create Modules
-* Registry
-* Publish > Module > Github App
-    * terraform-module-reg-demo-tag
-    * terraform-module-reg-demo-branch          
+✅ Importing **modules and providers** from private VCS repositories  
+✅ Uploading and managing **private, custom providers** via API  
+✅ Curating a list of **commonly used public modules and providers**  
 
-## Test Module Reg
+The private registry works with any of **HCP Terraform's supported VCS providers** (GitHub, GitLab, Bitbucket, Azure DevOps, etc.), making it easy to manage and distribute reusable Terraform modules securely.  
+
+---  
+
+## 🔗 Links  
+- **Branch-Based Module:** [terraform-module-reg-demo-branch](https://github.com/tallen-hashicorp/terraform-module-reg-demo-branch)  
+- **Tag-Based Module:** [terraform-module-reg-demo-tag](https://github.com/tallen-hashicorp/terraform-module-reg-demo-tag)  
+
+---  
+
+## 🚀 Creating Modules in the Registry  
+1. Navigate to **Registry** in Terraform Cloud  
+2. Click **Publish > Module > GitHub App**  
+3. Select the repositories:  
+   - `terraform-module-reg-demo-tag`  
+   - `terraform-module-reg-demo-branch`  
+
+Terraform Cloud will scan the repositories and automatically detect **module versions** based on tags (`vX.Y.Z`) or branch names (e.g., `main`).  
+
+---  
+
+## 🛠️ Testing the Module Registration  
+Run the following commands to initialize and apply the module in an example workspace:  
+
 ```bash
-
-```
+cd example-workspace
+terraform init
+terraform apply
