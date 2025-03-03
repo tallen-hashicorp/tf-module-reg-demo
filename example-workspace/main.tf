@@ -8,7 +8,7 @@ terraform {
   }
   required_providers {
     random = {
-      source = "app.terraform.io/tallen-demo/random"
+      source = "tallen-demo/random"
       version = "3.7.1"
     }
   }

@@ -69,3 +69,11 @@ ssh ubuntu@OUTPUT_IP
 ```
 
 Replace OUTPUT_IP with the actual instance's public or private IP.
+
+## Test module reg
+
+```bash
+cd /home/ubuntu/tf-module-reg-demo/example-workspace
+terraform login
+terraform init
+```
