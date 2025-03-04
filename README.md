@@ -36,57 +36,103 @@ Terraform Cloud will scan the repositories and automatically detect **module ver
 
 ---  
 
-## Adding provider the Registry
-You can download a public provider and re-upload it to your private registry. There are a few differences in the workflow for re-uploading a public HashiCorp provider. In this example, you will download the Random provider and re-upload it to your private registry. You can use the same workflow for any official HashiCorp provider. More details on this process can be found [here](https://developer.hashicorp.com/terraform/enterprise/registry/airgapped-providers)
+## Adding a Provider to the Registry
 
-First, download the `SHASUMS` file. This file contains a SHA256 checksum for each build of this specific provider version.
+You can download a public provider and re-upload it to your private registry. There are a few differences in the workflow for re-uploading a public HashiCorp provider. In this example, you will download the `random` provider and re-upload it to your private registry. You can use the same workflow for any official HashiCorp provider. More details on this process can be found [here](https://developer.hashicorp.com/terraform/enterprise/registry/airgapped-providers).
+
+### Step 1: Download the Provider Files
+
+First, download the `SHA256SUMS` file, which contains a SHA256 checksum for each build of this specific provider version:
+
 ```bash
 wget https://releases.hashicorp.com/terraform-provider-random/3.7.1/terraform-provider-random_3.7.1_SHA256SUMS
 ```
 
-Next, download the `SHA256SUMS.72D7468F.sig` file. This file is a GPG binary signature of the `SHA256SUMS` file.
+Next, download the `SHA256SUMS.72D7468F.sig` file, which is a GPG binary signature of the `SHA256SUMS` file:
+
 ```bash
 wget https://releases.hashicorp.com/terraform-provider-random/3.7.1/terraform-provider-random_3.7.1_SHA256SUMS.72D7468F.sig
 ```
 
-Finally, download the `linux_amd64` build of the provider binary.
+Finally, download the provider binaries for the required platforms:
+
 ```bash
 wget https://releases.hashicorp.com/terraform-provider-random/3.7.1/terraform-provider-random_3.7.1_linux_amd64.zip
 wget https://releases.hashicorp.com/terraform-provider-random/3.7.1/terraform-provider-random_3.7.1_darwin_arm64.zip
 ```
 
-Next we will use [TFx](https://tfx.rocks/) to upload the provider to TFC. The initial focus of tfx was to execute the API-Driven workflow for a Workspace but has grown to manage multiple aspects of the platform. First we will insteall TFX if you do not already have it, below is the mac install instructions however you can find more install instructions [here](https://tfx.rocks/)
+### Step 2: Install `tfx`
+
+We will use [TFx](https://tfx.rocks/) to upload the provider to Terraform Cloud (TFC). TFx was originally designed to execute the API-driven workflow for a workspace but has expanded to manage multiple aspects of the platform.
+
+Install `tfx` using Homebrew (for macOS):
 
 ```bash
 brew install straubt1/tap/tfx
 ```
 
-Before we create and upload the provider we need to get the `keyid` from the signatrue:
+For other installation methods, refer to the [TFx installation guide](https://tfx.rocks/).
+
+### Step 3: Extract the `keyid`
+
+Before creating and uploading the provider, retrieve the `keyid` from the signature file:
+
 ```bash
 gpg --list-packets terraform-provider-random_3.7.1_SHA256SUMS.72D7468F.sig | grep "keyid"
 ```
-note this down for later
 
-Now lets create our new provider, more details on this can be found [here](https://tfx.rocks/commands/registry_provider/)
+Make a note of the `keyid` for later use.
+
+### Step 4: Create the Provider in the Registry
+
+Set up the necessary environment variables:
+
 ```bash
 export TFE_ORGANIZATION="tallen-demo"
-export TFE_TOKEN="YOUR TOKEN"
+export TFE_TOKEN="YOUR_TFC_TOKEN"
+```
+
+Create the provider:
+
+```bash
 tfx registry provider create --name random
 ```
 
-Now we'll upload the provider binary, we'll use the `keyid` we got ealier for this
+### Step 5: Upload the Provider Binary
+
+Upload the provider binary using the `keyid` retrieved earlier:
+
 ```bash
-tfx registry provider version create --name random --version 3.7.1 --key-id C820C6D5CD27AB87 --shasums ./terraform-provider-random_3.7.1_SHA256SUMS --shasums-sig=./terraform-provider-random_3.7.1_SHA256SUMS.72D7468F.sig
+tfx registry provider version create \
+  --name random \
+  --version 3.7.1 \
+  --key-id C820C6D5CD27AB87 \
+  --shasums ./terraform-provider-random_3.7.1_SHA256SUMS \
+  --shasums-sig ./terraform-provider-random_3.7.1_SHA256SUMS.72D7468F.sig
 ```
 
-finnaly we'll create the platofrms
+### Step 6: Create Platform Entries
+
+Register the Linux `amd64` platform:
+
 ```bash
-tfx registry provider version platform create --name random --version 3.7.1 --os linux --arch amd64 -f ./terraform-provider-random_3.7.1_linux_amd64.zip
+tfx registry provider version platform create \
+  --name random \
+  --version 3.7.1 \
+  --os linux \
+  --arch amd64 \
+  -f ./terraform-provider-random_3.7.1_linux_amd64.zip
 ```
 
-If you are using a mac, you can also run
+If using macOS with an `arm64` architecture, also run:
+
 ```bash
-tfx registry provider version platform create --name random --version 3.7.1 --os darwin --arch arm64 -f ./terraform-provider-random_3.7.1_darwin_arm64.zip
+tfx registry provider version platform create \
+  --name random \
+  --version 3.7.1 \
+  --os darwin \
+  --arch arm64 \
+  -f ./terraform-provider-random_3.7.1_darwin_arm64.zip
 ```
 
 ---
