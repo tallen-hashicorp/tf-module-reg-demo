@@ -4,7 +4,7 @@
 - [ ] Module Registry Overview  
 - [ ] How to Publish and Upgrade Tag-Based Modules  
 - [ ] How to Publish and Upgrade Branch-Based Modules  
-- [ ] Using a Module on a Local Laptop with Public Registry Access Blocked  
+- [ ] Using a Module on air gapped ec2 instance
 
 ---  
 
@@ -46,7 +46,7 @@ terraform apply
 cd ..
 ```
 
-# Create Airgapped EC2  
+# Create Air Gapped EC2  
 
 This setup uses an **existing SSH key** named `tyler`.  
 🔹 **Update** the SSH key in `main.tf` on **line 16** if needed.  
@@ -70,9 +70,9 @@ ssh ubuntu@OUTPUT_IP
 
 Replace OUTPUT_IP with the actual instance's public or private IP.
 
-## Run the Terraform Module in an Airgapped Instance
+## Run the Terraform Module in an Air Gapped Instance
 
-The EC2 instance uses UFW to restrict outbound connections only to `99.83.150.238` and `75.2.98.97`. This setup ensures we can test Terraform functionality in an airgapped environment while still allowing access to Terraform Cloud.
+The EC2 instance uses UFW to restrict outbound connections only to `99.83.150.238` and `75.2.98.97`. This setup ensures we can test Terraform functionality in an air gapped environment while still allowing access to Terraform Cloud.
 
 ### Steps to Initialize and Run the Module
 
