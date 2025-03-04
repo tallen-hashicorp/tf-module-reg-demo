@@ -73,7 +73,7 @@ brew install straubt1/tap/tfx
 
 For other installation methods, refer to the [TFx installation guide](https://tfx.rocks/).
 
-### Step 3: Set the Key ID
+### Step 3: Understanding  Key ID
 
 We are Re-uploading the provider. There are two differences to publishing a custom provider that you need to be aware of
 
@@ -152,8 +152,8 @@ cd ..
 # Create Air Gapped EC2  
 
 This setup uses an **existing SSH key** named `tyler`.  
-🔹 **Update** the SSH key in `main.tf` on **line 16** if needed.  
-🔹 **Ensure** your AWS environment variables are set before proceeding.  
+*  **Update** the SSH key in `main.tf` on **line 16** if needed.  
+* **Ensure** your AWS environment variables are set before proceeding.  
 
 ## Deploy the EC2 Instance  
 Run the following commands:  
