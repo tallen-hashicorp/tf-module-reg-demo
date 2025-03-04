@@ -73,15 +73,12 @@ brew install straubt1/tap/tfx
 
 For other installation methods, refer to the [TFx installation guide](https://tfx.rocks/).
 
-### Step 3: Extract the `keyid`
+### Step 3: Set the Key ID
 
-Before creating and uploading the provider, retrieve the `keyid` from the signature file:
+We are Re-uploading the provider. There are two differences to publishing a custom provider that you need to be aware of
 
-```bash
-gpg --list-packets terraform-provider-random_3.7.1_SHA256SUMS.72D7468F.sig | grep "keyid"
-```
-
-Make a note of the `keyid` for later use.
+* Do not sign the binary with your GPG key; HashiCorp's public PGP key has already signed it.
+* Do not upload your public GPG key. Instead, use HashiCorp's public key. Terraform Enterprise version v202309-1 and newer includes the public key by default. The key ID is `34365D9472D7468F`. You can verify the ID by importing the public key locally.
 
 ### Step 4: Create the Provider in the Registry
 
@@ -106,7 +103,7 @@ Upload the provider binary using the `keyid` retrieved earlier:
 tfx registry provider version create \
   --name random \
   --version 3.7.1 \
-  --key-id C820C6D5CD27AB87 \
+  --key-id 34365D9472D7468F \
   --shasums ./terraform-provider-random_3.7.1_SHA256SUMS \
   --shasums-sig ./terraform-provider-random_3.7.1_SHA256SUMS.72D7468F.sig
 ```
@@ -133,6 +130,11 @@ tfx registry provider version platform create \
   --os darwin \
   --arch arm64 \
   -f ./terraform-provider-random_3.7.1_darwin_arm64.zip
+```
+
+**Not required** however if you wish to delete the provider from the registry you can use the following
+```bash
+tfx registry provider delete --name random
 ```
 
 ---
