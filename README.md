@@ -70,10 +70,17 @@ ssh ubuntu@OUTPUT_IP
 
 Replace OUTPUT_IP with the actual instance's public or private IP.
 
-## Test module reg
+## Run the Terraform Module in an Airgapped Instance
+
+The EC2 instance uses UFW to restrict outbound connections only to `99.83.150.238` and `75.2.98.97`. This setup ensures we can test Terraform functionality in an airgapped environment while still allowing access to Terraform Cloud.
+
+### Steps to Initialize and Run the Module
 
 ```bash
 cd /home/ubuntu/tf-module-reg-demo/example-workspace
+
 terraform login
 terraform init
+
+terraform plan
 ```
